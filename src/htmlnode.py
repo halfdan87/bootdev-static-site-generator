@@ -29,7 +29,7 @@ class HTMLNode:
 
 
 class LeafNode(HTMLNode):
-    def __init__(self, value, tag=None, props=None):
+    def __init__(self, tag, value, props=None):
         super().__init__(tag, value, [], props)
 
     def to_html(self):
@@ -45,7 +45,7 @@ class LeafNode(HTMLNode):
 
 
 class ParentNode(HTMLNode):
-    def __init__(self, children, tag=None, props=None):
+    def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 
     def to_html(self):
@@ -64,15 +64,15 @@ class ParentNode(HTMLNode):
 
 def text_node_to_html_node(text_node):
     if text_node.text_type == text_type_text:
-        return LeafNode(text_node.value)
+        return LeafNode(None, text_node.text)
     if text_node.text_type == text_type_bold:
-        return LeafNode(text_node.value, "b")
+        return LeafNode("b", text_node.text)
     if text_node.text_type == text_type_italic:
-        return LeafNode(text_node.value, "i")
+        return LeafNode("i", text_node.text)
     if text_node.text_type == text_type_code:
-        return LeafNode(text_node.value, "code")
+        return LeafNode("code", text_node.text)
     if text_node.text_type == text_type_link:
-        return LeafNode(text_node.value, "a", {"href": text_node.url})
+        return LeafNode("a", text_node.text, {"href": text_node.url})
     if text_node.text_type == text_type_image:
-        return LeafNode("", "img", {"src": text_node.url, "alt": text_node.value})
+        return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
     raise Exception(f"Wrong text type: {text_node.text_type}")
